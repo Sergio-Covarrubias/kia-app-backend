@@ -1,6 +1,7 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { DatabaseModule } from 'src/database.module';
-import { AuthMiddleware } from '../middlewares/auth.middleware';
+import { AuthMiddleware } from '@middlewares/auth.middleware';
+import { AdminMiddleware } from '@middlewares/admin.middleware';
 
 import { AuthTokenService } from './auth-token.service';
 import { UsersController } from './users.controller';
@@ -17,5 +18,9 @@ export class UsersModule implements NestModule {
     consumer
       .apply(AuthMiddleware)
       .forRoutes('api/validate');
+
+    consumer
+      .apply(AdminMiddleware)
+      .forRoutes('api/users');
   }
 }

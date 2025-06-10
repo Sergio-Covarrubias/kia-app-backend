@@ -19,6 +19,13 @@ export class Residue extends Model {
 
     @AllowNull(false)
     @Column({ 
+        type: DataType.STRING,
+        validate: { len: [1, 255] },
+    })
+    translated_name: string;
+
+    @AllowNull(false)
+    @Column({ 
         type: DataType.STRING(10),
         validate: { len: [10, 10] },
     })

@@ -5,5 +5,5 @@ import { SctCode } from './entities/sct-code.entity';
 
 @Injectable()
 export class SctCodesService extends GenericResourceCrud<SctCode> {
-    constructor() { super(SctCode, 'code'); }
+    constructor() { super(SctCode, ['code']); }
 }

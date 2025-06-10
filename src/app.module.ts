@@ -10,9 +10,10 @@ import { Providers1Module } from './resources/providers1/providers1.module';
 import { SctCodesModule } from './resources/sct-codes/sct-codes.module';
 import { Providers2Module } from './resources/providers2/providers2.module';
 import { ManagersModule } from './resources/managers/managers.module';
+import { ManifestModule } from './manifest/manifest.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), UsersModule, FormsModule, ResiduesModule, ContainersModule, AreasModule, ProcessingStagesModule, Providers1Module, SctCodesModule, Providers2Module, ManagersModule],
+  imports: [ConfigModule.forRoot(), UsersModule, FormsModule, ResiduesModule, ContainersModule, AreasModule, ProcessingStagesModule, Providers1Module, SctCodesModule, Providers2Module, ManagersModule, ManifestModule],
   controllers: [],
   providers: [],
 })

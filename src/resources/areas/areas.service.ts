@@ -5,5 +5,5 @@ import { Area } from './entities/area.entity';
 
 @Injectable()
 export class AreasService extends GenericResourceCrud<Area> {
-    constructor() { super(Area, 'name'); }
+    constructor() { super(Area, ['name']); }
 }

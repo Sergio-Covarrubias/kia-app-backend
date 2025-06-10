@@ -5,7 +5,7 @@ import { Residue } from './entities/residue.entity';
 
 @Injectable()
 export class ResiduesService extends GenericResourceCrud<Residue> {
-    constructor() { super(Residue, 'name'); }
+  constructor() { super(Residue, ['name']); }
 }
 
 // @Injectable()

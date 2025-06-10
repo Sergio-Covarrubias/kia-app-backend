@@ -11,17 +11,36 @@ export class ResiduesController {
 
   @Post()
   async create(@Body() createResidueDto: CreateResidueDto) {
-    return await this.residuesService.create(createResidueDto);
+    return await this.residuesService.create({
+      name: createResidueDto.name,
+      translated_name: createResidueDto.translatedName,
+      materials: createResidueDto.materials,
+    });
   }
 
   @Get()
   async findAll() {
-    return await this.residuesService.findAll();
+    const data = await this.residuesService.findAll();
+
+    const formattedData = data.map((resiude) => {
+      return {
+        id: resiude.id,
+        name: resiude.name,
+        translatedName: resiude.translated_name,
+        materials: resiude.materials,
+      };
+    });
+
+    return formattedData;
   }
 
   @Put(':id')
   async update(@Param('id') id: string, @Body() updateResidueDto: UpdateResidueDto) {
-    return await this.residuesService.update(+id, updateResidueDto);
+    return await this.residuesService.update(+id, {
+      name: updateResidueDto.name,
+      translated_name: updateResidueDto.translatedName,
+      materials: updateResidueDto.materials,
+    });
   }
 
   @Delete(':id')

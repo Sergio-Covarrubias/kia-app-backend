@@ -5,5 +5,5 @@ import { Manager } from './entities/manager.entity';
 
 @Injectable()
 export class ManagersService extends GenericResourceCrud<Manager> {
-    constructor() { super(Manager, 'name'); }
+    constructor() { super(Manager, ['name']); }
 }

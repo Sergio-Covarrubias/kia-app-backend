@@ -5,5 +5,5 @@ import { ProcessingStage } from './entities/processing-stage.entity';
 
 @Injectable()
 export class ProcessingStagesService extends GenericResourceCrud<ProcessingStage> {
-    constructor() { super(ProcessingStage, 'name'); }
+    constructor() { super(ProcessingStage, ['name']); }
 }

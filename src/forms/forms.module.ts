@@ -15,6 +15,6 @@ export class FormsModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .forRoutes('api/form');
+      .forRoutes('api/forms');
   }
 }

@@ -5,5 +5,5 @@ import { Container } from './entities/container.entity';
 
 @Injectable()
 export class ContainersService extends GenericResourceCrud<Container> {
-    constructor() { super(Container, 'name'); }
+    constructor() { super(Container, ['name']); }
 }

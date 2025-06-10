@@ -1,32 +1,22 @@
-import { Controller, Get, Post, Put, Delete, Body, Req, Query } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Req, Query, Param, BadRequestException } from '@nestjs/common';
+
+import { createError, handleError } from '@utils/handle-error';
 
 import { AuthTokenService } from './auth-token.service';
 import { UsersService } from './users.service';
 
-import { UserDto } from './dto/user.dto';
 import { LoginDto } from './dto/login.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Controller('api')
 export class UsersController {
   constructor(private readonly authTokenService: AuthTokenService, private readonly usersService: UsersService) { }
 
-  @Post('signin')
-  async signin(@Body() signinData: UserDto) {
-    signinData.password = await this.authTokenService.encrypt(signinData.password);
-    
-    const user = await this.usersService.create(signinData);
-    const token = await this.authTokenService.create(user);
-
-    return {
-      token,
-      id: user.id,
-      isAdmin: user.is_admin,
-    };
-  }
-
   @Post('login')
-  async login(@Body() loginData: LoginDto) {    
-    const user = await this.usersService.find(loginData);
+  async login(@Body() loginData: LoginDto) {
+    const user = await this.usersService.getByCorporateId(loginData);
     const token = await this.authTokenService.create(user);
 
     return {
@@ -41,25 +31,88 @@ export class UsersController {
   validate(@Req() req: any) {
     const user = req.user;
     return {
-        id: user.id,
-        isAdmin: user.isAdmin,
+      id: user.id,
+      isAdmin: user.isAdmin,
     };
   }
 
-  @Post('user')
-  async create(@Body() createDTO: UserDto) {
+  @Get('users')
+  async getPaginated(@Query('query') queryQ: string, @Query('page') pageQ: string, @Query('limit') limitQ: string) {
+    try {
+      const page = +pageQ;
+      if (isNaN(page) || page <= 0) {
+        throw createError(BadRequestException, 'page', 'Page number must be greater than 0');
+      }
+
+      const limit = +limitQ;
+      if (isNaN(limit) || limit <= 0) {
+        throw createError(BadRequestException, 'limit', 'Limit number must be greater than 0');
+      }
+
+      const query = queryQ || '';
+      return await this.usersService.getPaginated(query, page, limit);
+    } catch (error: any) {
+      return handleError(error);
+    }
+  }
+
+  @Get('users/:id')
+  async get(@Param('id') id: string) {
+    try {
+      if (isNaN(+id)) {
+        throw createError(BadRequestException, 'invalidId', 'Id must be a number');
+      }
+
+      return await this.usersService.get(+id);
+    } catch (error: any) {
+      return handleError(error);
+    }
+  }
+
+  @Post('users')
+  async create(@Body() createDTO: CreateUserDto) {
     createDTO.password = await this.authTokenService.encrypt(createDTO.password);
-    await this.usersService.create(createDTO);
+    return await this.usersService.prcreate(createDTO);
+    //return await this.usersService.create(createDTO);
   }
 
-  @Put('user')
-  async put(@Body() putDTO: UserDto) {
-    putDTO.password = await this.authTokenService.encrypt(putDTO.password);
-    await this.usersService.put(putDTO);
+  @Patch('users/password/:id')
+  async updatePassword(@Param('id') id: string, @Body() updatePasswordDTO: UpdatePasswordDto) {
+    try {
+      if (isNaN(+id)) {
+        throw createError(BadRequestException, 'invalidId', 'Id must be a number');
+      }
+
+      updatePasswordDTO.password = await this.authTokenService.encrypt(updatePasswordDTO.password);
+      return await this.usersService.updatePassword(+id, updatePasswordDTO);
+    } catch (error: any) {
+      return handleError(error);
+    }
   }
 
-  @Delete('user')
-  async delete(@Query('corporate_id') corporateId: string) {
-    await this.usersService.delete(corporateId);
+  @Patch('users/:id')
+  async update(@Param('id') id: string, @Body() updateUserDTO: UpdateUserDto) {
+    try {
+      if (isNaN(+id)) {
+        throw createError(BadRequestException, 'invalidId', 'Id must be a number');
+      }
+
+      return await this.usersService.update(+id, updateUserDTO);
+    } catch (error: any) {
+      return handleError(error);
+    }
+  }
+
+  @Delete('users/:id')
+  async delete(@Param('id') id: string) {
+    try {
+      if (isNaN(+id)) {
+        throw createError(BadRequestException, 'invalidId', 'Id must be a number');
+      }
+
+      return await this.usersService.delete(+id);
+    } catch (error: any) {
+      return handleError(error);
+    }
   }
 }

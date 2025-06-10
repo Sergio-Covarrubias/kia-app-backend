@@ -1,11 +1,11 @@
 import {
-    Table,
-    Column,
-    Model,
-    DataType,
-    ForeignKey,
-    BelongsTo,
-    AllowNull
+  Table,
+  Column,
+  Model,
+  DataType,
+  ForeignKey,
+  BelongsTo,
+  AllowNull
 } from 'sequelize-typescript';
 
 import { User } from 'src/users/entities/user.entity';
@@ -18,118 +18,129 @@ import { SctCode } from '@resources/sct-codes/entities/sct-code.entity';
 import { Provider2 } from '@resources/providers2/entities/providers2.entity';
 import { Manager } from '@resources/managers/entities/manager.entity';
 
-@Table({ tableName: 'forms' })
+@Table({ 
+  tableName: 'forms',
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
+})
 export class Form extends Model {
-    @AllowNull(false)
-    @ForeignKey(() => User)
-    @Column({ 
-        type: DataType.INTEGER, 
-        onDelete: 'CASCADE' 
-    })
-    user_id: number;
+  @AllowNull(false)
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.INTEGER,
+    onDelete: 'CASCADE'
+  })
+  user_id: number;
 
-    @BelongsTo(() => User)
-    user: User;
-    
-    @AllowNull(false)
-    @ForeignKey(() => Residue)
-    @Column({ 
-        type: DataType.INTEGER, 
-        onDelete: 'CASCADE' 
-    })
-    residue_id: number;
+  @BelongsTo(() => User)
+  user: User;
 
-    @BelongsTo(() => Residue)
-    residue: Residue;
+  @AllowNull(false)
+  @ForeignKey(() => Residue)
+  @Column({
+    type: DataType.INTEGER,
+    onDelete: 'CASCADE'
+  })
+  residue_id: number;
 
-    @AllowNull(false)
-    @ForeignKey(() => Container)
-    @Column({ 
-        type: DataType.INTEGER, 
-        onDelete: 'CASCADE' 
-    })
-    container_id: number;
+  @BelongsTo(() => Residue)
+  residue: Residue;
 
-    @BelongsTo(() => Container)
-    container: Container;
+  @AllowNull(false)
+  @ForeignKey(() => Container)
+  @Column({
+    type: DataType.INTEGER,
+    onDelete: 'CASCADE'
+  })
+  container_id: number;
 
-    @AllowNull(false)
-    @Column({
-        type: DataType.FLOAT,
-        validate: { min: 0.01 },
-    })
-    tons: number;
+  @BelongsTo(() => Container)
+  container: Container;
 
-    @AllowNull(false)
-    @ForeignKey(() => Area)
-    @Column({ 
-        type: DataType.INTEGER, 
-        onDelete: 'CASCADE' 
-    })
-    area_id: number;
+  @AllowNull(false)
+  @Column({
+    type: DataType.INTEGER,
+    validate: { min: 1 },
+  })
+  quantity: number;
 
-    @BelongsTo(() => Area)
-    area: Area;
+  @AllowNull(false)
+  @Column({
+    type: DataType.FLOAT,
+    validate: { min: 0.01 },
+  })
+  tons: number;
 
-    @AllowNull(false)
-    @Column({ type: DataType.DATEONLY })
-    entry_date: Date;
+  @AllowNull(false)
+  @ForeignKey(() => Area)
+  @Column({
+    type: DataType.INTEGER,
+    onDelete: 'CASCADE'
+  })
+  area_id: number;
 
-    @Column({ type: DataType.DATEONLY })
-    exit_date: Date | null;
+  @BelongsTo(() => Area)
+  area: Area;
 
-    @AllowNull(false)
-    @ForeignKey(() => ProcessingStage)
-    @Column({ 
-        type: DataType.INTEGER, 
-        onDelete: 'CASCADE' 
-    })
-    processing_stage_id: number;
+  @AllowNull(false)
+  @Column({ type: DataType.DATEONLY })
+  entry_date: string;
 
-    @BelongsTo(() => ProcessingStage)
-    processing_stage: ProcessingStage;
+  @Column({ type: DataType.DATEONLY })
+  exit_date: string | null;
 
-    @AllowNull(false)
-    @ForeignKey(() => Provider1)
-    @Column({ 
-        type: DataType.INTEGER, 
-        onDelete: 'CASCADE' 
-    })
-    provider_1_id: number;
+  @AllowNull(false)
+  @ForeignKey(() => ProcessingStage)
+  @Column({
+    type: DataType.INTEGER,
+    onDelete: 'CASCADE'
+  })
+  processing_stage_id: number;
 
-    @BelongsTo(() => Provider1)
-    provider_1: Provider1;
+  @BelongsTo(() => ProcessingStage)
+  processing_stage: ProcessingStage;
 
-    @AllowNull(false)
-    @ForeignKey(() => SctCode)
-    @Column({ 
-        type: DataType.INTEGER, 
-        onDelete: 'CASCADE' 
-    })
-    sct_code_id: number;
+  @AllowNull(false)
+  @ForeignKey(() => Provider1)
+  @Column({
+    type: DataType.INTEGER,
+    onDelete: 'CASCADE'
+  })
+  provider_1_id: number;
 
-    @BelongsTo(() => SctCode)
-    sct_code: SctCode;
+  @BelongsTo(() => Provider1)
+  provider_1: Provider1;
 
-    @AllowNull(false)
-    @ForeignKey(() => Provider2)
-    @Column({ 
-        type: DataType.INTEGER, 
-        onDelete: 'CASCADE' 
-    })
-    provider_2_id: number;
+  @AllowNull(false)
+  @ForeignKey(() => SctCode)
+  @Column({
+    type: DataType.INTEGER,
+    onDelete: 'CASCADE'
+  })
+  sct_code_id: number;
 
-    @BelongsTo(() => Provider2)
-    provider_2: Provider2;
+  @BelongsTo(() => SctCode)
+  sct_code: SctCode;
 
-    @AllowNull(false)
-    @ForeignKey(() => Manager)
-    @Column({ 
-        type: DataType.INTEGER, 
-        onDelete: 'CASCADE' 
-    })
-    manager_id: number;
+  @AllowNull(false)
+  @ForeignKey(() => Provider2)
+  @Column({
+    type: DataType.INTEGER,
+    onDelete: 'CASCADE'
+  })
+  provider_2_id: number;
 
-    @BelongsTo(() => Manager)
-    manager: Manager;
+  @BelongsTo(() => Provider2)
+  provider_2: Provider2;
+
+  @AllowNull(false)
+  @ForeignKey(() => Manager)
+  @Column({
+    type: DataType.INTEGER,
+    onDelete: 'CASCADE'
+  })
+  manager_id: number;
+
+  @BelongsTo(() => Manager)
+  manager: Manager;
 }

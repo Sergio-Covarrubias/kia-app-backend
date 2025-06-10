@@ -1,8 +1,12 @@
-import { Table, Column, Model, DataType, AllowNull, Unique, Default } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, AllowNull, Unique } from 'sequelize-typescript';
 
 @Table({ 
     tableName: 'users',
-    timestamps: false,
+    timestamps: true,
+    paranoid: true,
+    deletedAt: 'deleted_at',
+    createdAt: false,
+    updatedAt: false,
 })
 export class User extends Model {
     @AllowNull(false)
@@ -11,7 +15,10 @@ export class User extends Model {
     corporate_id: string;
 
     @AllowNull(false)
-    @Column({ type: DataType.STRING })
+    @Column({ 
+      type: DataType.STRING, 
+      validate: { len: [8, 255] },
+    })
     password: string;
 
     @AllowNull(false)
